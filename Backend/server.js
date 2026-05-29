@@ -9,7 +9,7 @@ const app  = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+  origin: "https://week-11-mission11-3tsj.vercel.app",
   methods: ["GET", "POST", "DELETE", "PATCH"],
   allowedHeaders: ["Content-Type"],
 }));
