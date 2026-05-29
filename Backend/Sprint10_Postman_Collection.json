@@ -1,0 +1,188 @@
+{
+  "info": {
+    "name": "Sprint 10 – MongoDB Atlas API",
+    "_postman_id": "sprint10-collection",
+    "description": "QA test suite for POST, GET, and DELETE /posts endpoints.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "BASE_URL",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "POST_ID",
+      "value": "",
+      "type": "string",
+      "description": "Auto-populated by the Create Post test script"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "url": "{{BASE_URL}}/",
+        "description": "Verify server is live and DB is connected."
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200', () => pm.response.to.have.status(200));",
+              "pm.test('Status is OK', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.status).to.eql('OK');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /posts – Create Post",
+      "request": {
+        "method": "POST",
+        "url": "{{BASE_URL}}/posts",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"My First Atlas Post\",\n  \"content\": \"Persisted in MongoDB Atlas via Mongoose ODM.\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 201 Created', () => pm.response.to.have.status(201));",
+              "pm.test('Response has _id', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.data).to.have.property('_id');",
+              "  // Save the ID for the DELETE test",
+              "  pm.collectionVariables.set('POST_ID', json.data._id);",
+              "});",
+              "pm.test('success flag is true', () => {",
+              "  pm.expect(pm.response.json().success).to.be.true;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST /posts – Validation Error (missing title)",
+      "request": {
+        "method": "POST",
+        "url": "{{BASE_URL}}/posts",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"content\": \"No title provided — should fail validation.\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 400 Bad Request', () => pm.response.to.have.status(400));",
+              "pm.test('Returns validation errors array', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.errors).to.be.an('array').with.length.above(0);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET /posts – Fetch All Posts",
+      "request": {
+        "method": "GET",
+        "url": "{{BASE_URL}}/posts"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('Data is an array', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.data).to.be.an('array');",
+              "});",
+              "pm.test('Count matches data length', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.count).to.eql(json.data.length);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE /posts/:id – Delete Post",
+      "request": {
+        "method": "DELETE",
+        "url": "{{BASE_URL}}/posts/{{POST_ID}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 200 OK', () => pm.response.to.have.status(200));",
+              "pm.test('Deleted post ID matches', () => {",
+              "  const json = pm.response.json();",
+              "  pm.expect(json.data._id).to.eql(pm.collectionVariables.get('POST_ID'));",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE /posts/:id – Not Found",
+      "request": {
+        "method": "DELETE",
+        "url": "{{BASE_URL}}/posts/000000000000000000000000"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 404 Not Found', () => pm.response.to.have.status(404));",
+              "pm.test('Returns not found message', () => {",
+              "  pm.expect(pm.response.json().success).to.be.false;",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "DELETE /posts/:id – Invalid ID Format",
+      "request": {
+        "method": "DELETE",
+        "url": "{{BASE_URL}}/posts/not-a-valid-id"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status 400 Bad Request', () => pm.response.to.have.status(400));",
+              "pm.test('Returns invalid ID message', () => {",
+              "  pm.expect(pm.response.json().message).to.include('Invalid post ID');",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
