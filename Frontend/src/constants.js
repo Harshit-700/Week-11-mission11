@@ -1,11 +1,7 @@
-// constants.js
 
-// ── OMDB (external movie search API) ──────────────────────────────────────
 export const API_KEY  = "e2a53bdc";
 export const BASE_URL = "https://www.omdbapi.com";
 
-// ── Backend REST API (Sprint 10 Node/Express) ─────────────────────────────
-// Phase 1 (P0): real endpoint replaces any dummy URI
 export const BACKEND_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 export const POSTER_COLORS = [
