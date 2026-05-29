@@ -2,7 +2,7 @@
 export const API_KEY  = "e2a53bdc";
 export const BASE_URL = "https://www.omdbapi.com";
 
-export const BACKEND_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+export const BACKEND_URL = import.meta.env.VITE_API_URL || "https://week-11-mission11-1.onrender.com/api";
 
 export const POSTER_COLORS = [
   "#1a0a2e","#0a1a2e","#2e0a0a","#0a2e1a",
