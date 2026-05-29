@@ -1,9 +1,5 @@
-// api.js
-// Phase 1 (P0): OMDB external API  +  our Node/Express backend (real endpoints, no dummies)
 
 import { API_KEY, BASE_URL, BACKEND_URL } from "./constants";
-
-// ── OMDB helpers ───────────────────────────────────────────────────────────
 function normalizeMovie(m) {
   return {
     id: m.imdbID,
@@ -22,7 +18,6 @@ function normalizeMovie(m) {
     rated: m.Rated || null,
   };
 }
-
 export async function searchMovies(query, page = 1) {
   const url = `${BASE_URL}/?apikey=${API_KEY}&s=${encodeURIComponent(query)}&type=movie&page=${page}`;
   const res  = await fetch(url);
@@ -47,10 +42,6 @@ export const PRESET_SEARCHES = {
   toprated: "batman",
   upcoming: "spider",
 };
-
-// ── Backend REST API (Phase 1 P0 + Phase 2 P1) ────────────────────────────
-// Centralised fetch wrapper — all calls to our Express server go through here
-
 async function backendRequest(path, options = {}) {
   const res = await fetch(`${BACKEND_URL}${path}`, {
     headers: { "Content-Type": "application/json", ...options.headers },
@@ -64,14 +55,8 @@ async function backendRequest(path, options = {}) {
   }
   return data;
 }
-
-// GET /api/posts  — used in useEffect (Phase 1)
 export const fetchWatchlistPosts = () => backendRequest("/posts");
-
-// POST /api/posts — create document in MongoDB (Phase 2)
 export const createWatchlistPost = (body) =>
   backendRequest("/posts", { method: "POST", body: JSON.stringify(body) });
-
-// DELETE /api/posts/:id — delete + mutate DOM (Phase 2)
 export const deleteWatchlistPost = (id) =>
   backendRequest(`/posts/${id}`, { method: "DELETE" });
