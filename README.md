@@ -1,6 +1,3 @@
-# Sprint 11 — Integrated MERN Full Stack Application
-
-## README.md
 
 # Sprint 11 — CineStream Integrated MERN Stack Project
 
@@ -9,6 +6,10 @@ Sprint 11 is a fully integrated MERN Stack application built using React.js, Vit
 The application demonstrates frontend-backend integration, REST API communication, MongoDB cloud database connectivity, and modern React-based UI development practices.
 
 ---
+#📸 Screenshot- ![img alt](https://github.com/Harshit-700/Week-11-mission11/blob/1055ed5a889551a1fda9b4f04efcb8fb3f10b189/Screenshot%20(438).png)
+# 🔗 Live Demo frontend url:https://week-11-mission11-3tsj.vercel.app/
+
+# 🔗 Live Demo url:https://week-11-mission11-1.onrender.com/
 
 ## 📁 Project Structure
 
@@ -62,7 +63,7 @@ integrated-project/
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 1. Clone Repository
 
