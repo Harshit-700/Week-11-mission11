@@ -1,4 +1,4 @@
-// App.jsx — Sprint 11: CineStream × MongoDB Integration
+
 import { useState, useEffect, useCallback, useRef } from "react";
 import { MOCK_MOVIES } from "./constants";
 import { searchMovies, getMovieDetail, PRESET_SEARCHES } from "./api";
@@ -9,7 +9,7 @@ import TopBar        from "./components/TopBar";
 import Hero          from "./components/Hero";
 import MovieGrid     from "./components/MovieGrid";
 import FavoritesPage from "./components/FavoritesPage";
-import WatchlistPage from "./components/WatchlistPage";   // NEW — MongoDB CRUD
+import WatchlistPage from "./components/WatchlistPage";   
 import MovieModal    from "./components/MovieModal";
 import Toast         from "./components/Toast";
 
@@ -32,7 +32,6 @@ export default function App() {
   const observerRef    = useRef(null);
   const loadingRef     = useRef(false);
 
-  // ── OMDB fetch ────────────────────────────────────────────────────────────
   const fetchMovies = useCallback(async (pg, reset = false) => {
     if (loadingRef.current) return;
     loadingRef.current = true;
@@ -127,7 +126,7 @@ export default function App() {
           onFavClick={() => setView("favorites")}
         />
 
-        {/* ── View router ─────────────────────────────────────────────── */}
+        {/* ── View  */}
         {view === "favorites" ? (
           <FavoritesPage
             favorites={favorites}
